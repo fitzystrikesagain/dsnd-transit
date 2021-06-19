@@ -2,7 +2,6 @@
 import logging
 import time
 
-
 from confluent_kafka import avro
 from confluent_kafka.admin import AdminClient, NewTopic
 from confluent_kafka.avro import AvroProducer
@@ -17,12 +16,12 @@ class Producer:
     existing_topics = set([])
 
     def __init__(
-        self,
-        topic_name,
-        key_schema,
-        value_schema=None,
-        num_partitions=1,
-        num_replicas=1,
+            self,
+            topic_name,
+            key_schema,
+            value_schema=None,
+            num_partitions=1,
+            num_replicas=1,
     ):
         """Initializes a Producer object with basic settings"""
         self.topic_name = topic_name
