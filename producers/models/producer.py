@@ -6,6 +6,8 @@ from confluent_kafka import avro
 from confluent_kafka.admin import AdminClient, NewTopic
 from confluent_kafka.avro import AvroProducer
 
+from utils.constants import BROKER_URL, SCHEMA_REGISTRY_URL
+
 logger = logging.getLogger(__name__)
 
 
@@ -30,16 +32,11 @@ class Producer:
         self.num_partitions = num_partitions
         self.num_replicas = num_replicas
 
-        #
-        #
-        # TODO: Configure the broker properties below. Make sure to reference the project README
-        # and use the Host URL for Kafka and Schema Registry!
-        #
-        #
+        # TODO: Configure the broker properties below. Make sure to reference the project README and use the Host URL \
+        #  for Kafka and Schema Registry!
         self.broker_properties = {
-            # TODO
-            # TODO
-            # TODO
+            "broker_url": BROKER_URL,
+            "schema_registry_url": SCHEMA_REGISTRY_URL,
         }
 
         # If the topic does not already exist, try to create it
@@ -53,12 +50,7 @@ class Producer:
 
     def create_topic(self):
         """Creates the producer topic if it does not already exist"""
-        #
-        #
-        # TODO: Write code that creates the topic for this producer if it does not already exist on
-        # the Kafka Broker.
-        #
-        #
+        # TODO: Write code that creates the topic for this producer if it does not already exist on the Kafka Broker.
         logger.info("topic creation kafka integration incomplete - skipping")
 
     def time_millis(self):
@@ -66,11 +58,7 @@ class Producer:
 
     def close(self):
         """Prepares the producer for exit by cleaning up the producer"""
-        #
-        #
         # TODO: Write cleanup code for the Producer here
-        #
-        #
         logger.info("producer close incomplete - skipping")
 
     def time_millis(self):
