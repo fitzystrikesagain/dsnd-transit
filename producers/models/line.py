@@ -191,7 +191,7 @@ class Line:
                 return next_index, True
             else:
                 return self.num_stations - (next_index % self.num_stations), \
-                       False
+                    False
         else:
             next_index = curr_index - step_size
             if next_index > 0:

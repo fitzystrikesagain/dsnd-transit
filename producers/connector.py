@@ -4,7 +4,12 @@ import logging
 
 import requests
 
-from utils.constants import KAFKA_CONNECT_URL, JDBC_URL, POSTGRES_USER, POSTGRES_PASSWORD
+from utils.constants import (
+    KAFKA_CONNECT_URL,
+    JDBC_URL,
+    POSTGRES_USER,
+    POSTGRES_PASSWORD
+)
 
 logger = logging.getLogger(__name__)
 
@@ -21,28 +26,29 @@ def configure_connector():
         return
 
     logger.info("connector code not completed skipping connector creation")
+    config = {
+        "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+        "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "key.converter.schemas.enable": "false",
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "value.converter.schemas.enable": "false",
+        "batch.max.rows": "500",
+        "connection.url": JDBC_URL,
+        "connection.user": POSTGRES_USER,
+        "connection.password": POSTGRES_PASSWORD,
+        "table.whitelist": "stations",
+        "mode": "incrementing",
+        "incrementing.column.name": "stop_id",
+        "topic.prefix": "connect-",
+        "poll.interval.ms": "2000",
+    }
     resp = requests.post(
-       KAFKA_CONNECT_URL,
-       headers={"Content-Type": "application/json"},
-       data=json.dumps({
-           "name": CONNECTOR_NAME,
-           "config": {
-               "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
-               "key.converter": "org.apache.kafka.connect.json.JsonConverter",
-               "key.converter.schemas.enable": "false",
-               "value.converter": "org.apache.kafka.connect.json.JsonConverter",
-               "value.converter.schemas.enable": "false",
-               "batch.max.rows": "500",
-               "connection.url": JDBC_URL,
-               "connection.user": POSTGRES_USER,
-               "connection.password": POSTGRES_PASSWORD,
-               "table.whitelist": "stations",
-               "mode": "incrementing",
-               "incrementing.column.name": "stop_id",
-               "topic.prefix": "connect-",
-               "poll.interval.ms": "2000",
-           }
-       }),
+        KAFKA_CONNECT_URL,
+        headers={"Content-Type": "application/json"},
+        data=json.dumps({
+            "name": CONNECTOR_NAME,
+            "config": config
+        }),
     )
 
     # Ensure a healthy response was given

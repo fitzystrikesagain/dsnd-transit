@@ -24,10 +24,10 @@ class Turnstile(Producer):
         """Create the Turnstile"""
         station_name = (
             station.name.lower()
-                .replace("/", "_and_")
-                .replace(" ", "_")
-                .replace("-", "_")
-                .replace("'", "")
+                        .replace("/", "_and_")
+                        .replace(" ", "_")
+                        .replace("-", "_")
+                        .replace("'", "")
         )
 
         # TODO: Complete the below by deciding on a better topic name,
