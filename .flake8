@@ -1,3 +1,5 @@
 [flake8]
 exclude = .git,__pycache__,venv dir,images dir
 max-complexity = 10
+# ignore unused imports for now
+ignore=F401
