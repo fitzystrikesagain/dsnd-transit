@@ -7,7 +7,6 @@ from confluent_kafka import avro
 from producers.models import (
     Line,
     Producer,
-    Station,
     Train,
     Turnstile,
     Weather
@@ -19,12 +18,16 @@ logger = logging.getLogger(__name__)
 class Station(Producer):
     """Defines a single station"""
 
-    key_schema = avro.load(f"{Path(__file__).parents[0]}/schemas/arrival_key.json")
+    key_schema = avro.load(
+        f"{Path(__file__).parents[0]}/schemas/arrival_key.json")
 
-    # TODO: Define this value schema in `schemas/station_value.json, then uncomment the below
-    # value_schema = avro.load(f"{Path(__file__).parents[0]}/schemas/arrival_value.json")
+    # TODO: Define this value schema in `schemas/station_value.json,
+    #  then uncomment the below
+    # filename = f"{Path(__file__).parents[0]}/schemas/arrival_value.json"
+    # value_schema = avro.load(filename)
 
-    def __init__(self, station_id, name, color, direction_a=None, direction_b=None):
+    def __init__(self, station_id, name, color, direction_a=None,
+                 direction_b=None):
         self.name = name
         station_name = (
             self.name.lower()
@@ -34,8 +37,9 @@ class Station(Producer):
                 .replace("'", "")
         )
 
-        # TODO: Complete the below by deciding on a topic name, number of partitions, and number of replicas
-        topic_name = f"{station_name}"  # TODO: Come up with a better topic name
+        # TODO: Complete the below by deciding on a better topic name,
+        #  number of partitions, and number of replicas
+        topic_name = f"{station_name}"
         super().__init__(
             topic_name,
             key_schema=Station.key_schema,
@@ -66,7 +70,9 @@ class Station(Producer):
         # )
 
     def __str__(self):
-        return "Station | {:^5} | {:<30} | Direction A: | {:^5} | departing to {:<30} | Direction B: | {:^5} | departing to {:<30} | ".format(
+        return """Station | {:^5} | {:<30} | Direction A: | {:^5} |
+        departing to {:<30} | Direction B: | {:^5} | departing to {:<30} |
+        """.format(
             self.station_id,
             self.name,
             self.a_train.train_id if self.a_train is not None else "---",
