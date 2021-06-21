@@ -1,7 +1,6 @@
 """Configures a Kafka Connector for Postgres Station data"""
 import json
 import logging
-import os
 
 import requests
 
@@ -46,9 +45,9 @@ def configure_connector():
        }),
     )
 
-    ## Ensure a healthy response was given
-    # resp.raise_for_status()
-    # logging.debug("connector created successfully")
+    # Ensure a healthy response was given
+    resp.raise_for_status()
+    logging.debug("connector created successfully")
 
 
 if __name__ == "__main__":
