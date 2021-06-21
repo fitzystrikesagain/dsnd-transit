@@ -5,9 +5,12 @@ from pathlib import Path
 from confluent_kafka import avro
 
 from producers.models import (
+    Line,
     Producer,
     Station,
-    Turnstile
+    Train,
+    Turnstile,
+    Weather
 )
 
 logger = logging.getLogger(__name__)
