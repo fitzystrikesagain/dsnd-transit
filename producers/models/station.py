@@ -11,6 +11,7 @@ from producers.models import (
     Turnstile,
     Weather
 )
+from utils.constants import CTA_PREFIX
 
 logger = logging.getLogger(__name__)
 
@@ -35,16 +36,13 @@ class Station(Producer):
                 .replace("'", "")
         )
 
-        # TODO: Complete the below by deciding on a better topic name,
-        #  number of partitions, and number of replicas
-        topic_name = f"{station_name}"
+        topic_name = f"{CTA_PREFIX}.arrivals.{station_name}"
         super().__init__(
             topic_name,
             key_schema=Station.key_schema,
-            # TODO: Uncomment once schema is defined
-            # value_schema=Station.value_schema,
-            # num_partitions=???,
-            # num_replicas=???,
+            value_schema=Station.value_schema,
+            num_partitions=2,
+            num_replicas=1
         )
 
         self.station_id = int(station_id)
@@ -57,15 +55,19 @@ class Station(Producer):
 
     def run(self, train, direction, prev_station_id, prev_direction):
         """Simulates train arrivals at this station"""
-        # TODO: Complete this function by producing an arrival message to Kafka
-        logger.info("arrival kafka integration incomplete - skipping")
-        # self.producer.produce(
-        #    topic=self.topic_name,
-        #    key={"timestamp": self.time_millis()},
-        #    value={
-        #        # TODO: Configure this
-        #    },
-        # )
+        self.producer.produce(
+           topic=self.topic_name,
+           key={"timestamp": self.time_millis()},
+           value={
+               "station_id": self.station_id,
+               "train_id": train.train_id,
+               "direction": direction,
+               "line": train.line,
+               "train_status": train.train_status,
+               "prev_station_id": prev_station_id,
+               "prev_direction": prev_direction,
+           },
+        )
 
     def __str__(self):
         return """Station | {:^5} | {:<30} | Direction A: | {:^5} |
