@@ -32,9 +32,6 @@ class Producer:
         self.num_partitions = num_partitions
         self.num_replicas = num_replicas
 
-        # TODO: Configure the broker properties below. Make sure to
-        #  reference the project README and use the Host URL \
-        #  for Kafka and Schema Registry!
         self.broker_properties = {
             "broker_url": BROKER_URL,
             "schema_registry_url": SCHEMA_REGISTRY_URL,
@@ -45,20 +42,35 @@ class Producer:
             self.create_topic()
             Producer.existing_topics.add(self.topic_name)
 
-        # TODO: Configure the AvroProducer
-        # self.producer = AvroProducer(
-        # )
+        self.producer = AvroProducer({
+            "bootstrap.servers": BROKER_URL},
+            schema_registry=SCHEMA_REGISTRY_URL,
+        )
 
     def create_topic(self):
         """Creates the producer topic if it does not already exist"""
-        # TODO: Write code that creates the topic for this producer if it
-        #  does not already exist on the Kafka Broker.
-        logger.info("topic creation kafka integration incomplete - skipping")
+        client = AdminClient({'bootstrap.servers': BROKER_URL})
+        topic = NewTopic(
+            self.topic_name,
+            num_partitions=self.num_partitions,
+            replication_factor=self.num_replicas
+        )
+        try:
+            client.create_topics(topic)
+            logger.info(
+                "topic creation kafka integration incomplete - skipping")
+        except Exception as e:
+            logger.error(e)
 
     def time_millis(self):
         return int(round(time.time() * 1000))
 
     def close(self):
         """Prepares the producer for exit by cleaning up the producer"""
-        # TODO: Write cleanup code for the Producer here
-        logger.info("producer close incomplete - skipping")
+        try:
+            self.producer.flush(5)
+            self.producer.close()
+            logger.info("producer close complete")
+        except Exception as e:
+            logger.error(e)
+            logger.info("producer close incomplete - skipping")
