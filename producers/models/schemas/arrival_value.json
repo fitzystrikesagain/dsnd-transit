@@ -1,7 +1,7 @@
 {
   "type" : "record",
   "namespace" : "org.cta",
-  "name" : "arrival_value",
+  "name" : "arrival.value",
   "fields" : [
     {"name": "station_id", "type": "int"},
     {"name": "train_id", "type": "int"},

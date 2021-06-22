@@ -55,19 +55,22 @@ class Station(Producer):
 
     def run(self, train, direction, prev_station_id, prev_direction):
         """Simulates train arrivals at this station"""
-        self.producer.produce(
-           topic=self.topic_name,
-           key={"timestamp": self.time_millis()},
-           value={
-               "station_id": self.station_id,
-               "train_id": train.train_id,
-               "direction": direction,
-               "line": train.line,
-               "train_status": train.train_status,
-               "prev_station_id": prev_station_id,
-               "prev_direction": prev_direction,
-           },
-        )
+        try:
+            self.producer.produce(
+               topic=self.topic_name,
+               key={"timestamp": self.time_millis()},
+               value={
+                   "station_id": self.station_id,
+                   "train_id": train.train_id,
+                   "direction": direction,
+                   "line": train.line,
+                   "train_status": train.train_status,
+                   "prev_station_id": prev_station_id,
+                   "prev_direction": prev_direction,
+               },
+            )
+        except Exception as e:
+            logger.error(e)
 
     def __str__(self):
         return """Station | {:^5} | {:<30} | Direction A: | {:^5} |
