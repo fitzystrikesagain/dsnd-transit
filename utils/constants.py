@@ -1,34 +1,36 @@
 import os
-
+# todo: clean this up, a lot
 """
 Container names
 """
-ZOOKEEPER_CONTAINER = os.environ.get("ZOOKEEPER_CONTAINER")
-BROKER_CONTAINER = os.environ.get("BROKER_CONTAINER")
-SCHEMA_REGISTRY_CONTAINER = os.environ.get("SCHEMA_REGISTRY_CONTAINER")
-REST_PROXY_CONTAINER = os.environ.get("REST_PROXY_CONTAINER")
-CONNECT_CONTAINER = os.environ.get("CONNECT_CONTAINER")
-KSQL_CONTAINER = os.environ.get("KSQL_CONTAINER")
-CONNECT_UI_CONTAINER = os.environ.get("CONNECT_UI_CONTAINER")
-TOPICS_UI_CONTAINER = os.environ.get("TOPICS_UI_CONTAINER")
-SCHEMA_REGISTRY_UI_CONTAINER = os.environ.get("SCHEMA_REGISTRY_UI_CONTAINER")
-POSTGRES_CONTAINER = os.environ.get("POSTGRES_CONTAINER")
+ZOOKEEPER_CONTAINER = os.environ.get("ZOOKEEPER_CONTAINER", "localhost")
+BROKER_CONTAINER = os.environ.get("BROKER_CONTAINER", "localhost")
+SCHEMA_REGISTRY_CONTAINER = os.environ.get("SCHEMA_REGISTRY_CONTAINER",
+                                           "localhost")
+REST_PROXY_CONTAINER = os.environ.get("REST_PROXY_CONTAINER", "localhost")
+CONNECT_CONTAINER = os.environ.get("CONNECT_CONTAINER", "localhost")
+KSQL_CONTAINER = os.environ.get("KSQL_CONTAINER", "localhost")
+CONNECT_UI_CONTAINER = os.environ.get("CONNECT_UI_CONTAINER", "localhost")
+TOPICS_UI_CONTAINER = os.environ.get("TOPICS_UI_CONTAINER", "localhost")
+SCHEMA_REGISTRY_UI_CONTAINER = os.environ.get(
+    "SCHEMA_REGISTRY_UI_CONTAINER", "localhost")
+POSTGRES_CONTAINER = os.environ.get("POSTGRES_CONTAINER", "localhost")
 
 """
 Service URLs
 """
 BROKER_URL = "PLAINTEXT://BROKER_CONTAINER:9092"
-SCHEMA_REGISTRY_URL = "http://SCHEMA_REGISTRY_CONTAINER:8081"
-KAFKA_CONNECT_URL = "http://CONNECT_CONTAINER:8083/connectors"
-REST_PROXY_URL = "http://SCHEMA_REGISTRY_CONTAINER:8082"
+SCHEMA_REGISTRY_URL = f"http://{SCHEMA_REGISTRY_CONTAINER}:8081"
+KAFKA_CONNECT_URL = f"http://{CONNECT_CONTAINER}:8083/connectors"
+REST_PROXY_URL = f"http://{SCHEMA_REGISTRY_CONTAINER}:8082"
 
 """
 Postgres config
 """
-POSTGRES_HOST = os.environ.get("POSTGRES_HOST")
-POSTGRES_DB = os.environ.get("POSTGRES_DB")
-POSTGRES_USER = os.environ.get("POSTGRES_USER")
-POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
+POSTGRES_USER = "cta_admin"
+POSTGRES_PASSWORD = "chicago"
+POSTGRES_DB = "cta"
+POSTGRES_HOST = "postgres"
 JDBC_URL = f"jdbc:postgresql://{POSTGRES_HOST}:5432/{POSTGRES_DB}"
 
 """

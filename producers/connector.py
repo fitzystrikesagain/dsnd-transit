@@ -22,7 +22,7 @@ def configure_connector():
 
     resp = requests.get(f"{KAFKA_CONNECT_URL}/{CONNECTOR_NAME}")
     if resp.status_code == 200:
-        logging.debug("connector already created skipping recreation")
+        logging.debug("connector already created, skipping recreation")
         return
 
     logger.info("connector code not completed skipping connector creation")
@@ -42,6 +42,7 @@ def configure_connector():
         "topic.prefix": "connect-",
         "poll.interval.ms": "2000",
     }
+
     resp = requests.post(
         KAFKA_CONNECT_URL,
         headers={"Content-Type": "application/json"},
@@ -52,8 +53,13 @@ def configure_connector():
     )
 
     # Ensure a healthy response was given
-    resp.raise_for_status()
-    logging.debug("connector created successfully")
+    try:
+        resp.raise_for_status()
+    except requests.exceptions.HTTPError as e:
+        logger.error(e)
+        logger.error(resp.json()["message"])
+    # else:
+    print("connector created successfully")
 
 
 if __name__ == "__main__":
